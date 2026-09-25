@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HTTP/1.1 Calculator</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background: #10151c;
+            color: #e8eef5;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at top right, #1d3b49, #10151c 55%);
+        }
+
+        main {
+            width: min(760px, calc(100% - 32px));
+            padding: 48px 0;
+        }
+
+        .eyebrow { color: #68e0b0; letter-spacing: .12em; text-transform: uppercase; }
+        h1 { font-size: clamp(2.4rem, 8vw, 5rem); line-height: 1; margin: 16px 0; }
+        p { color: #aebdca; line-height: 1.7; }
+
+        section {
+            margin-top: 32px;
+            padding: 24px;
+            border: 1px solid #31505e;
+            border-radius: 8px;
+            background: rgba(20, 31, 40, .86);
+        }
+
+        code { color: #ffd479; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        th, td { text-align: left; padding: 10px 0; border-bottom: 1px solid #29404d; }
+        th { color: #68e0b0; }
+        td:last-child { text-align: right; color: #ffd479; }
+        pre { overflow-x: auto; padding: 16px; background: #0a0e13; border-radius: 6px; color: #d8e4ee; }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="eyebrow">Persistent TCP · HTTP/1.1 · C</div>
+        <h1>Calculator server</h1>
+        <p>
+            A small HTTP/1.1 calculator that reads each request, returns an exact
+            <code>Content-Length</code>, and keeps the connection open for the next request.
+        </p>
+
+        <section>
+            <h2>Supported operations</h2>
+            <table>
+                <tr><th>Request</th><th>Response</th></tr>
+                <tr><td><code>GET /add?a=2&amp;b=3</code></td><td>200 · 5</td></tr>
+                <tr><td><code>GET /sub?a=10&amp;b=4</code></td><td>200 · 6</td></tr>
+                <tr><td><code>GET /mul?a=6&amp;b=7</code></td><td>200 · 42</td></tr>
+                <tr><td><code>GET /div?a=9&amp;b=3</code></td><td>200 · 3</td></tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Run it</h2>
+            <pre>cc -std=c11 -Wall -Wextra -O2 -o bserve bserve.c
+./bserve ./www 9000</pre>
+            <p>Every HTTP/1.1 request must include a non-empty <code>Host</code> header.</p>
+        </section>
+    </main>
+</body>
+</html>
